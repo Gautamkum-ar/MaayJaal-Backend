@@ -36,7 +36,7 @@ const porfile = async (req, res) => {
 const editProfile = async (req, res) => {
   const { id } = req.user;
 
-  const { name, bio, image } = req.body;
+  const { name, bio, image, userName } = req.body;
 
   if (image) {
     try {
@@ -57,7 +57,7 @@ const editProfile = async (req, res) => {
 
       const foundUser = await UserSchema.findByIdAndUpdate(
         { _id: id },
-        { $set: { name, bio, avatar: imageUrl } },
+        { $set: { name, bio, avatar: imageUrl, userName: userName } },
         {
           new: true,
         }
@@ -73,7 +73,7 @@ const editProfile = async (req, res) => {
   } else {
     const foundUser = await UserSchema.findByIdAndUpdate(
       { _id: id },
-      { $set: { name, bio } },
+      { $set: { name, bio, userName } },
       {
         new: true,
       }
@@ -87,4 +87,18 @@ const editProfile = async (req, res) => {
   }
 };
 
-export { porfile, editProfile };
+const getAllUser = async (req, res) => {
+  try {
+    const findAllUsers = await UserSchema.find();
+
+    return res.status(200).json({
+      message: `${findAllUsers.length} users are found in database`,
+      success: true,
+      data: findAllUsers,
+    });
+  } catch (error) {
+    throw new error(error);
+  }
+};
+
+export { porfile, editProfile, getAllUser };

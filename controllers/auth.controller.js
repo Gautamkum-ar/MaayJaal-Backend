@@ -4,7 +4,7 @@ import { generateToken } from "../service/token.js";
 
 const signUp = async (req, res) => {
   try {
-    const { email, password, name, image } = req.body;
+    const { email, password, name,userName } = req.body;
 
     const isExist = await UserSchema.findOne({ email: email });
 
@@ -14,19 +14,20 @@ const signUp = async (req, res) => {
         success: false,
       });
     }
-    const buffer = Buffer.from(
-      image.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),
-      "base64"
-    );
-    const imagePath = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    // const buffer = Buffer.from(
+    //   image.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),
+    //   "base64"
+    // );
+    // const imagePath = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
 
-    const imageUrl = await cloudinaryServices.uploadFunc(buffer, imagePath);
+    // const imageUrl = await cloudinaryServices.uploadFunc(buffer, imagePath);
 
     const user = new UserSchema({
       email,
       password,
       name,
-      avatar: imageUrl,
+      userName
+      // avatar: imageUrl,
     });
 
     const result = await user.save();
