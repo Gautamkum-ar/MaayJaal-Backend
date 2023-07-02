@@ -1,5 +1,6 @@
 import UserSchema from "../models/user.models.js";
 import cloudinaryServices from "../service/cloudinary.services.js";
+import followers from "../models/followers.model.js";
 
 // user controller
 
@@ -19,11 +20,11 @@ const porfile = async (req, res) => {
     }
 
     //sending response if user found
-
+    const follower = await followers.find();
     return res.status(200).json({
       message: "user found",
       success: true,
-      data: user,
+      data: { user, follower },
     });
   } catch (error) {
     console.log(error);
@@ -97,7 +98,7 @@ const getAllUser = async (req, res) => {
       data: findAllUsers,
     });
   } catch (error) {
-    throw new error(error);
+    console.log(error);
   }
 };
 

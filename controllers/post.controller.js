@@ -1,7 +1,7 @@
-import UserSchema from "../models/user.models.js";
 import cloudinaryServices from "../service/cloudinary.services.js";
 
 import posts from "../models/post.models.js";
+import likes from "../models/like.model.js";
 
 export const createPost = async (req, res) => {
   const { id } = req.user;
@@ -77,10 +77,10 @@ export const createPost = async (req, res) => {
 export const getAllPost = async (req, res) => {
   try {
     const findPost = await posts.find().populate("userId").select("-password ");
-
+    const like = await likes.find();
     return res.status(200).json({
       message: "Posts Found successfully",
-      data: findPost,
+      data: { findPost, like },
     });
   } catch (error) {
     console.log(error);
@@ -177,7 +177,16 @@ export const deletePost = async (req, res) => {
   const postId = req.params.postId;
 
   try {
-    const findPost = await posts.findByIdAndDelete({ _id: postId, userId: id });
+    const findPost = await posts.find({ _id: postId, userId: id });
+
+    if (!findPost) {
+      return res.status(404).res({
+        message: "Post does not belongs to you",
+        success: false,
+      });
+    }
+    await posts.findByIdAndDelete({ _id: postId, userId: id });
+    await likes.findOneAndDelete({ postId: postId }, { userId: id });
 
     const allpost = await posts.find().populate("userId").select("-password ");
 
@@ -187,6 +196,6 @@ export const deletePost = async (req, res) => {
       data: allpost,
     });
   } catch (error) {
-    throw new error(error);
+    console.log(error);
   }
 };
