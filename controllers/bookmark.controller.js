@@ -3,15 +3,17 @@ import bookmarks from "../models/bookmark.model.js";
 export const addToBookMark = async (req, res) => {
   const { id } = req.user;
   const { postId } = req.body;
-  console.log(id);
-  console.log(postId);
 
   try {
     const findBookMark = await bookmarks.find({ userId: id, postId: postId });
+
     if (findBookMark.length > 0) {
-      return res.status(409).json({
-        message: "Post already exits in bookmarks",
+      await bookmarks.findOneAndDelete({ userId: id, postId: postId });
+      const bookmarkData = await bookmarks.find().populate("postId");
+      return res.status(200).json({
+        message: "Post remove from bookmarks",
         success: false,
+        data: bookmarkData,
       });
     } else {
       const newBookmark = new bookmarks({
@@ -21,9 +23,7 @@ export const addToBookMark = async (req, res) => {
 
       await newBookmark.save();
 
-      const allBookmarks = await bookmarks.find();
-
-      console.log(allBookmarks);
+      const allBookmarks = await bookmarks.find().populate("postId");
 
       return res.status(200).json({
         message: "Post bookmark successfully",
