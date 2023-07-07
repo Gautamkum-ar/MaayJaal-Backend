@@ -37,7 +37,7 @@ const porfile = async (req, res) => {
 const editProfile = async (req, res) => {
   const { id } = req.user;
 
-  const { name, bio, image, userName } = req.body;
+  const { name, bio, image, userName, avatar } = req.body;
 
   if (image) {
     try {
@@ -74,7 +74,7 @@ const editProfile = async (req, res) => {
   } else {
     const foundUser = await UserSchema.findByIdAndUpdate(
       { _id: id },
-      { $set: { name, bio, userName } },
+      { $set: { name, bio, userName, avatar } },
       {
         new: true,
       }
