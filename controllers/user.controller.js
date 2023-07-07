@@ -37,7 +37,8 @@ const porfile = async (req, res) => {
 const editProfile = async (req, res) => {
   const { id } = req.user;
 
-  const { name, bio, image, userName, avatar } = req.body;
+  const { name, bio, image, userName, avatar,portFolioLink } = req.body;
+
 
   if (image) {
     try {
@@ -58,11 +59,12 @@ const editProfile = async (req, res) => {
 
       const foundUser = await UserSchema.findByIdAndUpdate(
         { _id: id },
-        { $set: { name, bio, avatar: imageUrl, userName: userName } },
+        { $set: { name, bio, avatar: imageUrl, userName: userName,portfolio:portFolioLink } },
         {
           new: true,
         }
       );
+
       return res.status(200).json({
         message: "Profile updated successfully",
         success: true,
@@ -74,7 +76,7 @@ const editProfile = async (req, res) => {
   } else {
     const foundUser = await UserSchema.findByIdAndUpdate(
       { _id: id },
-      { $set: { name, bio, userName, avatar } },
+      { $set: { name, bio, userName, avatar,portfolio:portFolioLink } },
       {
         new: true,
       }

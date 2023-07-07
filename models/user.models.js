@@ -37,6 +37,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "Hi there in using MaayaJaal",
     },
+    portfolio: {
+      type: String,
+      default: "",
+    },
     isPrivate: {
       type: Boolean,
       default: false,
