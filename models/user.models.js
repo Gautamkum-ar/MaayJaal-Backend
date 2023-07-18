@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema(
     cover: {
       type: String,
       default:
-        "https://res.cloudinary.com/dtswa0rzu/image/upload/v1650196033/talkline_default_cover.png",
+        "https://res.cloudinary.com/dbrpnkzsx/image/upload/v1689213446/1689213446200-57237618.png",
     },
     bio: {
       type: String,

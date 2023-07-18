@@ -76,7 +76,7 @@ export const createPost = async (req, res) => {
 
 export const getAllPost = async (req, res) => {
   try {
-    const findPost = await posts.find().populate("userId").select("-password ");
+    const findPost = await posts.find().populate("userId").select("-password");
     const like = await likes.find();
     return res.status(200).json({
       message: "Posts Found successfully",
@@ -154,7 +154,7 @@ export const editPost = async (req, res) => {
       }
       const findPost = await posts.findByIdAndUpdate(
         { _id: postId },
-        { $set: { caption: caption } },
+        { $set: { caption: caption, photoUrl: "" } },
         { new: true }
       );
 
